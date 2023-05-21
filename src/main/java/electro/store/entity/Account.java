@@ -27,6 +27,7 @@ public class Account  implements Serializable{
 	Integer telephone;
 	Date birthday;
 	String photo;
+	Boolean sex;
 	@JsonIgnore
 	@OneToMany(mappedBy = "account")
 	List<Order> orders;
