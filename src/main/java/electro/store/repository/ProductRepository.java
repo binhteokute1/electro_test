@@ -22,7 +22,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer>{
 	
 	Page<Product> findByNameContaining(String name, Pageable pageable);
 	
-	@Query(value="Select top 3 * from Products where Category_Id=?1", nativeQuery=true)
+	@Query(value="Select * from products where Category_Id=?1 limit 3", nativeQuery=true)
 	List<Product> findTop3ByCategoryId(Integer c1);  
 
 }
