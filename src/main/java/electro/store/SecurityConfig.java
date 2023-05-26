@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,8 +16,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 
 import electro.store.entity.Account;
+import electro.store.oauth.CustomOAuth2UserService;
 import electro.store.service.AccountService;
 
 @Configuration
@@ -24,10 +27,13 @@ import electro.store.service.AccountService;
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	@Autowired
 	AccountService accountService;
-//	@Autowired
-//	BCryptPasswordEncoder pe;
 	
-	BCryptPasswordEncoder pe = new BCryptPasswordEncoder();
+	@Lazy
+	@Autowired
+	BCryptPasswordEncoder pe;
+	
+	@Autowired
+	private CustomOAuth2UserService oAuth2UserService;
 	
 	//cung cấp nguồn dữ liệu đăng nhập
 	@Override
@@ -51,6 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable();
 		http.authorizeRequests()
+			.antMatchers("/oauth2/**").permitAll()
 			.antMatchers("/order/**","/favorite/list").authenticated()
 			.antMatchers("/admin/**").hasAnyRole("STAF","DIRE")
 			.antMatchers("/rest/authorities").hasRole("DIRE")
@@ -60,7 +67,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 			.loginPage("/security/login/form")
 			.loginProcessingUrl("/security/login")
 			.defaultSuccessUrl("/home/index", false)
-			.failureUrl("/security/login/error");
+			.failureUrl("/security/login/error")
+			.and()
+			.oauth2Login()
+				.loginPage("/login")
+				.userInfoEndpoint().userService(oAuth2UserService)
+				.and()
+			;
 		
 		http.rememberMe()
 			.tokenValiditySeconds(86400);
