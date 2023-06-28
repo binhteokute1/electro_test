@@ -1,4 +1,4 @@
-package electro.store.rest.controller;
+package electro.store.controller.rest;
 
 import java.util.List;
 
@@ -8,18 +8,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import electro.store.entity.Role;
-import electro.store.service.RoleService;
+import electro.store.entity.Category;
+import electro.store.service.CategoryService;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/rest/roles")
-public class RoleRestController {
+@RequestMapping("/rest/categories")
+public class CategoryRestController {
 	@Autowired
-	RoleService roleService;
+	CategoryService categoryService;
 	
-	@GetMapping
-	public List<Role> getAll(){
-		return roleService.findAll();
+	@GetMapping()
+	public List<Category> getAll() {
+		return categoryService.findAll();
 	}
+	
 }

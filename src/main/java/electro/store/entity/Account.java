@@ -33,8 +33,8 @@ public class Account  implements Serializable{
 	Boolean sex;
 	
 	@Enumerated(EnumType.STRING)
-	@Column(name="Auth_provider")
-	AuthenticationProvider authProvider;
+	@Column(name="Auth_type")
+	AuthenticationType authType;
 	
 	@JsonIgnore
 	@OneToMany(mappedBy = "account")

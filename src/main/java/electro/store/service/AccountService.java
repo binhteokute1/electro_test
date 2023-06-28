@@ -11,4 +11,13 @@ public interface AccountService {
 	public List<Account> getAdministrators();
 
 	public List<Account> findAll();
+
+	Account getAccountByEmail(String email);
+
+	void createNewAccountAfterOAuthLoginSuccess(String email, String name,
+			String oauth2ClientName);
+
+	void updateAccountAfterOAuthLoginSuccess(Account account, String name, 
+			String oauth2ClientName);
+
 }

@@ -117,6 +117,7 @@ app.controller("shopping-cart-ctrl", function($scope, $http) {
 		purchase() {
 			//lấy order hiện tại
 			var order = angular.copy(this);
+			
 			//thực hiện đơn hang
 			$http.post("/rest/orders", order).then(resp => {
                 alert("Đặt hàng thành công");
@@ -128,4 +129,11 @@ app.controller("shopping-cart-ctrl", function($scope, $http) {
             })
 		}
 	}
+	
+ 
+  $scope.result = 'pass';
+  
+  $scope.submitResult = function(result) {
+    alert(result)
+  };
 })

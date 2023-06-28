@@ -1,4 +1,4 @@
-package electro.store;
+package electro.store.security;
 
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -16,12 +16,13 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 
 import electro.store.entity.Account;
-import electro.store.oauth.CustomOAuth2UserService;
+import electro.store.security.oauth.CustomOAuth2UserService;
+import electro.store.security.oauth.OAuth2LoginSuccessHandler;
 import electro.store.service.AccountService;
 
+@SuppressWarnings("deprecation")
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
@@ -34,6 +35,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Autowired
 	private CustomOAuth2UserService oAuth2UserService;
+	
+	@Autowired
+	private OAuth2LoginSuccessHandler auth2LoginSuccessHandler;
 	
 	//cung cấp nguồn dữ liệu đăng nhập
 	@Override
@@ -57,7 +61,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable();
 		http.authorizeRequests()
-			.antMatchers("/oauth2/**").permitAll()
 			.antMatchers("/order/**","/favorite/list").authenticated()
 			.antMatchers("/admin/**").hasAnyRole("STAF","DIRE")
 			.antMatchers("/rest/authorities").hasRole("DIRE")
@@ -70,9 +73,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 			.failureUrl("/security/login/error")
 			.and()
 			.oauth2Login()
-				.loginPage("/login")
+				.loginPage("/security/login/form")
 				.userInfoEndpoint().userService(oAuth2UserService)
 				.and()
+				.successHandler(auth2LoginSuccessHandler)
 			;
 		
 		http.rememberMe()

@@ -1,4 +1,4 @@
-package electro.store.rest.controller;
+package electro.store.controller.rest;
 
 import java.io.File;
 

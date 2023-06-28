@@ -59,8 +59,18 @@
 						
 					</div>
 					
-					<div class="col-md-5 order-details">
-						<h4><a th:href="@{|/oauth2/authorization/google|}">Login with Google</a></h4>   
+					<div class="col-md-5 order-details">   
+					<a th:href="@{|/oauth2/authorization/facebook|}">
+						<button class="loginBtn loginBtn--facebook">
+						  Login with Facebook
+						</button>
+					</a>
+					<a th:href="@{|/oauth2/authorization/google|}">
+						<button class="loginBtn loginBtn--google">
+						  Login with Google
+						</button>
+					</a>
+					
 					</div>
 					
 				</div>

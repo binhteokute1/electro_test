@@ -90,7 +90,7 @@
 						</div>
 						<div class="payment-method">
 							<div class="input-radio">
-								<input type="radio" name="payment" id="payment-1">
+								<input ng-model="result" ng-value="'pass'" type="radio" name="payment" id="payment-1">
 								<label for="payment-1">
 									<span></span>
 									Direct Bank Transfer
@@ -100,20 +100,10 @@
 								</div>
 							</div>
 							<div class="input-radio">
-								<input type="radio" name="payment" id="payment-2">
+								<input ng-model="result"  ng-value="'fail'" type="radio" name="payment" id="payment-2">
 								<label for="payment-2">
 									<span></span>
-									Cheque Payment
-								</label>
-								<div class="caption">
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-								</div>
-							</div>
-							<div class="input-radio">
-								<input type="radio" name="payment" id="payment-3">
-								<label for="payment-3">
-									<span></span>
-									Paypal System
+									Payment on delivery
 								</label>
 								<div class="caption">
 									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
@@ -127,7 +117,8 @@
 								I've read and accept the <a href="#">terms & conditions</a>
 							</label>
 						</div>
-						<a ng-click="order.purchase()" class="primary-btn order-submit">Place order</a>
+						<a ng-if="result=='fail'" ng-click="order.purchase()" class="primary-btn order-submit">Place order</a>
+						<a ng-if="result=='pass'" th:href="@{|/api/payment/create_payment/{{cart.amount}}|}" ng-click="order.purchase()" class="primary-btn order-submit">Payment</a>
 					</div>
 					<!-- /Order Details -->
 				</div>
